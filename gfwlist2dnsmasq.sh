@@ -1,10 +1,11 @@
 #!/bin/sh
 
-# Name:        gfwlist2dnsmasq.sh
-# Desription:  A shell script which convert gfwlist into dnsmasq rules.
-# Version:     0.9.0 (2020.04.09)
-# Author:      Cokebar Chi
-# Website:     https://github.com/cokebar
+# Name:             gfwlist2dnsmasq.sh
+# Desription:       A shell script which convert gfwlist into dnsmasq rules.
+# Version:          0.9.0 (2020.04.09)
+# Original author:  Cokebar Chi
+# Maintainer:       docker-geph
+# Website:          https://github.com/docker-geph/gfwlist2dnsmasq
 
 _green() {
     printf '\033[1;31;32m'
@@ -27,11 +28,12 @@ _yellow() {
 usage() {
     cat <<-EOF
 
-Name:        gfwlist2dnsmasq.sh
-Desription:  A shell script which convert gfwlist into dnsmasq rules.
-Version:     0.8.0 (2017.12.25)
-Author:      Cokebar Chi
-Website:     https://github.com/cokebar
+Name:             gfwlist2dnsmasq.sh
+Desription:       A shell script which convert gfwlist into dnsmasq rules.
+Version:          0.9.0 (2020.04.09)
+Original author:  Cokebar Chi
+Maintainer:       docker-geph
+Website:          https://github.com/docker-geph/gfwlist2dnsmasq
 
 Usage: sh gfwlist2dnsmasq.sh [options] -o FILE
 Valid options are:
