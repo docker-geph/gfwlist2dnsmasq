@@ -104,7 +104,7 @@ check_depends(){
 get_args(){
     OUT_TYPE='DNSMASQ_RULES'
     DNS_IP='127.0.0.1'
-    DNS_PORT='5353'
+    DNS_PORT='5053'
     IPSET_NAME=''
     FILE_FULLPATH=''
     CURL_EXTARG=''
