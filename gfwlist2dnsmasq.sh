@@ -327,29 +327,29 @@ process(){
 
     if [ $OUT_TYPE = 'DNSMASQ_RULES' ]; then
     # Convert domains into dnsmasq rules
-        DNSMASQ_RULE="s#(.+)#server=/\1/${DNS_IP}\#${DNS_PORT}"
+        DNSMASQ_RULE="s|(.+)|server=/\1/${DNS_IP}#${DNS_PORT}"
         if [ $WITH_IPSET -eq 1 ]; then
-            _green 'Ipset rules included.'
-            DNSMASQ_RULE="$DNSMASQ_RULE
-ipset=/\1/$IPSET_NAME"
+            _green 'Ipset rules included.\n'
+            DNSMASQ_RULE="$DNSMASQ_RULE"'\
+ipset=/\1/'"$IPSET_NAME"
         else
-            _green 'Ipset rules not included.'
+            _green 'Ipset rules not included.\n'
         fi
         if [ $WITH_NFTSET4 -eq 1 ]; then
-            _green 'nftset4 rules included.'
-            DNSMASQ_RULE="$DNSMASQ_RULE
-nftset=/\1/4#inet#fw4#$NFTSET4_NAME"
+            _green 'nftset4 rules included.\n'
+            DNSMASQ_RULE="$DNSMASQ_RULE"'\
+nftset=/\1/4#inet#fw4#'"$NFTSET4_NAME"
         else
-            _green 'nftset4 rules not included.'
+            _green 'nftset4 rules not included.\n'
         fi
         if [ $WITH_NFTSET6 -eq 1 ]; then
-            _green 'nftset6 rules included.'
-            DNSMASQ_RULE="$DNSMASQ_RULE
-nftset=/\1/6#inet#fw4#$NFTSET6_NAME"
+            _green 'nftset6 rules included.\n'
+            DNSMASQ_RULE="$DNSMASQ_RULE"'\
+nftset=/\1/6#inet#fw4#'"$NFTSET6_NAME"
         else
-            _green 'nftset6 rules not included.'
+            _green 'nftset6 rules not included.\n'
         fi
-        DNSMASQ_RULE="${DNSMASQ_RULE}#g"
+        DNSMASQ_RULE="${DNSMASQ_RULE}|g"
         sort -u $DOMAIN_FILE | $SED_ERES "$DNSMASQ_RULE" > $CONF_TMP_FILE
 
         # Generate output file
