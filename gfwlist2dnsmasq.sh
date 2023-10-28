@@ -50,6 +50,8 @@ Valid options are:
     --nftset6 <nftset6_name>
                 IPv6 nftset name for the GfwList domains
                 (If not given, nftset6 rules will not be generated.)
+    -i, --input <FILE>
+                /path/to/input_filename
     -o, --output <FILE>
                 /path/to/output_filename
     -i, --insecure
@@ -120,6 +122,8 @@ get_args(){
     WITH_IPSET=0
     WITH_NFTSET4=0
     WITH_NFTSET6=0
+    OUT_FILE=''
+    INPUT_FILE=''
     EXTRA_DOMAIN_FILE=''
     EXCLUDE_DOMAIN_FILE=''
     IPV4_PATTERN='^((2[0-4][0-9]|25[0-5]|[01]?[0-9][0-9]?)\.){3}(2[0-4][0-9]|25[0-5]|[01]?[0-9][0-9]?)$'
@@ -159,6 +163,10 @@ get_args(){
                 ;;
             --output | -o)
                 OUT_FILE="$2"
+                shift
+                ;;
+            --input | -i)
+                INPUT_FILE="$2"
                 shift
                 ;;
             --extra-domain-file)
@@ -270,16 +278,21 @@ process(){
     CONF_TMP_FILE="$TMP_DIR/gfwlist.conf.tmp"
     OUT_TMP_FILE="$TMP_DIR/gfwlist.out.tmp"
 
-    # Fetch GfwList and decode it into plain text
-    printf 'Fetching GfwList... '
-    if [ $USE_WGET = 0 ]; then
-        curl -s -L $CURL_EXTARG -o$BASE64_FILE $BASE_URL
+    if [ -z $INPUT_FILE ]; then
+        # Fetch GfwList and decode it into plain text
+        printf 'Fetching GfwList... '
+        if [ $USE_WGET = 0 ]; then
+            curl -s -L $CURL_EXTARG -o$BASE64_FILE $BASE_URL
+        else
+            wget -q $WGET_EXTARG -O$BASE64_FILE $BASE_URL
+        fi
+        if [ $? != 0 ]; then
+            _red '\nFailed to fetch gfwlist.txt. Please check your Internet connection, and check TLS support for curl/wget.\n'
+            clean_and_exit 2
+        fi
     else
-        wget -q $WGET_EXTARG -O$BASE64_FILE $BASE_URL
-    fi
-    if [ $? != 0 ]; then
-        _red '\nFailed to fetch gfwlist.txt. Please check your Internet connection, and check TLS support for curl/wget.\n'
-        clean_and_exit 2
+        printf "Use local GfwList file $INPUT_FILE... "
+        BASE64_FILE="$INPUT_FILE"
     fi
     $BASE64_DECODE $BASE64_FILE > $GFWLIST_FILE || ( _red 'Failed to decode gfwlist.txt. Quit.\n'; clean_and_exit 2 )
     _green 'Done.\n\n'
