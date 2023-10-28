@@ -357,8 +357,12 @@ nftset=/\1/4#inet#fw4#'"$NFTSET4_NAME"
         fi
         if [ $WITH_NFTSET6 -eq 1 ]; then
             _green 'nftset6 rules included.\n'
-            DNSMASQ_RULE="$DNSMASQ_RULE"'\
+            if [ $WITH_NFTSET4 -eq 1 ]; then
+                DNSMASQ_RULE="${DNSMASQ_RULE},6#inet#fw4#${NFTSET6_NAME}"
+            else
+                DNSMASQ_RULE="$DNSMASQ_RULE"'\
 nftset=/\1/6#inet#fw4#'"$NFTSET6_NAME"
+            fi
         else
             _green 'nftset6 rules not included.\n'
         fi
