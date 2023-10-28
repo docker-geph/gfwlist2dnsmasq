@@ -50,7 +50,7 @@ Valid options are:
     --nftset6 <nftset6_name>
                 IPv6 nftset name for the GfwList domains
                 (If not given, nftset6 rules will not be generated.)
-    -i, --input <FILE>
+    --input <FILE>
                 /path/to/input_filename
     -o, --output <FILE>
                 /path/to/output_filename
@@ -165,7 +165,7 @@ get_args(){
                 OUT_FILE="$2"
                 shift
                 ;;
-            --input | -i)
+            --input)
                 INPUT_FILE="$2"
                 shift
                 ;;
