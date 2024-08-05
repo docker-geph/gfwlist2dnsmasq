@@ -323,10 +323,8 @@ process(){
 
     # Delete exclude domains
     if [ ! -z $EXCLUDE_DOMAIN_FILE ]; then
-        for line in $(cat $EXCLUDE_DOMAIN_FILE)
-        do
-            cat $DOMAIN_TEMP_FILE | grep -vF -f $EXCLUDE_DOMAIN_FILE > $DOMAIN_FILE
-        done
+        grep -v "^\s*$" $EXCLUDE_DOMAIN_FILE > $TMP_DIR/exclude-domain-file.conf
+        cat $DOMAIN_TEMP_FILE | grep -vF -f $TMP_DIR/exclude-domain-file.conf > $DOMAIN_FILE
         printf 'Domains in exclude domain file '$EXCLUDE_DOMAIN_FILE'... ' && _green 'Deleted\n'
     else
         cat $DOMAIN_TEMP_FILE > $DOMAIN_FILE
@@ -334,7 +332,7 @@ process(){
 
     # Add extra domains
     if [ ! -z $EXTRA_DOMAIN_FILE ]; then
-        cat $EXTRA_DOMAIN_FILE >> $DOMAIN_FILE
+        grep -v "^\s*$" $EXTRA_DOMAIN_FILE >> $DOMAIN_FILE
         printf 'Extra domain file '$EXTRA_DOMAIN_FILE'... ' && _green 'Added\n'
     fi
 
